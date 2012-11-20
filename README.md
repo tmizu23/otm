@@ -17,7 +17,7 @@ http://www.ecoris.co.jp/map/otm/index.html
  OpenLayers呼び出し。otm.htmlで利用
 - `OpenTileMap.js`  
  OpenTileMap用のOpenLayers拡張Tileクラス
-- `otm.db` 
+- `otm.db`  
  SQLiteデータベース。タイル情報を登録
 - `regist.php`  
  SQLiteデータベースへの登録、削除、呼び出しプログラム
