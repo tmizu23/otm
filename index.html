@@ -1,0 +1,195 @@
+<html lang="ja"> 
+<head>
+<meta charset="UTF-8">
+<title>OpenTileMap Portal(β)</title>
+<script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+<script>
+$(function(){
+    readdata();
+}); 
+function readdata(){
+    $.post("./regist.php", {mode : 0}, function(data){
+	    $("#table").find("tr:gt(0)").remove();
+	    $("#table").append(data); 
+    })
+}
+ 
+function regist(){
+    var regist_pass_val = $("#regist_pass").val();
+    var name_val = $("#name").val();
+    var url_val = $("#url").val();
+    var description_val = $("#description").val();
+    var attribution_val = $("#attribution").val();
+    var TMS_val = $("#TMS").val() == "on" ? 1 : 0;
+    var minx_val = $("#minx").val();
+    var maxx_val = $("#maxx").val();
+    var miny_val = $("#miny").val();
+    var maxy_val = $("#maxy").val();
+    var minz_val = $("#minz").val();
+    var maxz_val = $("#maxz").val();
+    
+    $.post("./regist.php", {regist_pass:regist_pass_val,mode:1,name:name_val,url:url_val,description:description_val,attribution:attribution_val,TMS:TMS_val,minx:minx_val,maxx:maxx_val,miny:miny_val,maxy:maxy_val,minz:minz_val,maxz:maxz_val}, function(data){
+        alert(data);
+	readdata();
+    }) 
+}
+function deleteRegistData(){
+    var delete_pass_val = $("#delete_pass").val();
+    var delete_id_val = $("#delete_id").val();
+    
+    $.post("./regist.php", {delete_pass:delete_pass_val,mode:2,delete_id:delete_id_val}, function(data){
+        alert(data);
+	readdata();
+    }) 
+}
+
+function generateMetaTile(){
+    var admin_pass_val = $("#admin_pass").val();
+    $.post("./generateMetaTile.php", {admin_pass:admin_pass_val}, function(data){
+	alert(data);
+    })
+}
+
+function readxml(){
+    var xmlurl_val = $("#xmlurl").val();
+    $.get(xmlurl_val, function(data){
+	$("#name").val($(data).find("Title").text());
+	$("#url").val(xmlurl_val.replace(/\/[^\/]*$/,'\/'));
+	$("#description").val($(data).find("Title").text());
+	//$("#attribution").val("");
+	$("#TMS").attr('checked','checked');
+	$("#minx").val($(data).find("BoundingBox").attr("miny"));//なぜかxとyが逆
+	$("#maxx").val($(data).find("BoundingBox").attr("maxy"));
+	$("#miny").val($(data).find("BoundingBox").attr("minx"));
+	$("#maxy").val($(data).find("BoundingBox").attr("maxx"));
+	$("#minz").val($(data).find("TileSet").eq(0).attr("href"));
+	$("#maxz").val($(data).find("TileSet").eq($(data).find("TileSet").length-1).attr("href"));
+    });
+}
+</script>
+<style TYPE="text/css">
+.table2{
+    border-top:1px solid #663300;
+    border-left:1px solid #663300;
+    border-collapse:collapse;
+    border-spacing:0;
+    background-color:#ffffff;
+    empty-cells:show;
+}
+.table2 th{
+    border-right:1px solid #663300;
+    border-bottom:1px solid #663300;
+    color:#ffffff;
+    background-color:#996633;
+    padding:0.3em 1em;
+    text-align:center;
+}
+.table2 td{
+    border-right:1px solid #663300;
+    border-bottom:1px solid #663300;
+    padding:0.3em 1em;
+}
+.table1{
+    border-top:1px solid #666600;
+    border-left:1px solid #666600;
+    border-collapse:collapse;
+    border-spacing:0;
+    background-color:#ffffff;
+    empty-cells:show;
+}
+.table1 th{
+    border-right:1px solid #666600;
+    border-bottom:1px solid #666600;
+    color:#ffffff;
+    background-color:#ff6600;
+    padding:0.3em 1em;
+    text-align:center;
+}
+.table1 td{
+    border-right:1px solid #666600;
+    border-bottom:1px solid #666600;
+    padding:0;
+}
+</style>
+</head> 
+<body> 
+<h1 style="text-align:center;">OpenTileMap (β)</h1>
+<hr>
+
+<h2>1.タイルデータ登録</h2>
+xml_url(via gdal2tiles):<input type="text" value="http://" id="xmlurl" style="width:400px;"><button onclick="readxml();">XML読込み</button>
+<div style="width:800px; overflow: auto;">
+<TABLE class="table1" style="margin:10px;">
+<TR>
+<TH>name</TH>
+<TH>url</TH>
+<TH>description</TH>
+<TH>attribution</TH>
+<TH>TMS</TH>
+<TH>minx</TH>
+<TH>maxx</TH>
+<TH>miny</TH>
+<TH>maxy</TH>
+<TH>minz</TH>
+<TH>maxz</TH>
+</TR>
+<TR>
+<TD><input type="text" id="name"></TD>
+<TD><input type="text" id="url" value="http://"></TD>
+<TD><input type="text" id="description"></TD>
+<TD><input type="text" id="attribution"></TD>
+<TD style="text-align:center;"><input type="checkbox" id="TMS" /></TD>
+<TD><input type="text" id="minx"></TD>
+<TD><input type="text" id="maxx"></TD>
+<TD><input type="text" id="miny"></TD>
+<TD><input type="text" id="maxy"></TD>
+<TD><input type="text" id="minz"></TD>
+<TD><input type="text" id="maxz"></TD>
+</TR>
+</TABLE>
+</div>
+pass:<input type="text" id="regist_pass"><button onclick="regist();">登録</button>
+
+<h2>2.タイル一覧</h2>
+<div style="width:800px;overflow: auto;">
+<TABLE class="table2" id="table" style="margin:10px;">
+<TR>
+<TH>id</TH>
+<TH>name</TH>
+<TH>url</TH>
+<TH>description</TH>
+<TH>attribution</TH>
+<TH>TMS</TH>
+<TH>minx</TH>
+<TH>maxx</TH>
+<TH>miny</TH>
+<TH>maxy</TH>
+<TH>minz</TH>
+<TH>maxz</TH>
+<TH>tiled</TH>
+</TR>
+<tbody></tbody>
+</TABLE>
+</div>
+id:<input type="text" id="delete_id">pass:<input type="text" id="delete_pass"><button onclick="deleteRegistData();">削除</button>
+
+<h2>3.メタタイル生成(管理者のみ)</h2>
+admin_pass:<input type="text" id="admin_pass"><button onclick="generateMetaTile();">タイル作成</button>
+
+<h2>4.OpenTileMap Finder</h2>
+<iframe src="otm.html" height=600 width=600 style="margin:10px;">OpenTileMap</iframe>
+<br>
+<a href="otm.html">map only</a>
+<hr>
+<h2>説明</h2>
+<ol>
+<li>タイル情報を登録。gdal2tileで作成される"tilemapresource.xml"を読み込んでもいい。</li>
+<li>passを設定して登録ボタンを押す。passは後から削除するためのパスワード。</li>
+<li>登録されるとRegisted Dataに表示される。</li>
+<li>登録したデータを削除したければidとpassを入力して削除ボタンを押す。</li>
+<li>管理者は、登録されたタイル情報からメタタイルを作成する。</li>
+<li>メタタイルとは、登録タイルの「url」と「名前」を、その提供範囲のすべてのタイルファイル（${z}/${x}/${y}.txt）に書き込んだもの。</li>
+<li>メタタイルの情報が地図に表示される。もしくは、タイルそのものを表示することも可能。</li>
+</ol>
+</body> 
+</html> 
