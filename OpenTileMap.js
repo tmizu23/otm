@@ -166,12 +166,14 @@ otm.Tile.OpenTileMap = OpenLayers.Class(OpenLayers.Tile, {
 //	/*タイル情報を表示
 	var xyz = this.layer.getXYZ(bounds);
 	var ctx = this.getCanvasContext();
+	ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.strokeRect(0,0,255,255);
 	ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
 	ctx.fillRect(0, 0, 255, 255);
         ctx.textAlign = 'center';
         ctx.font = '12px sans-serif';
         ctx.fillStyle = '#f00';
-        ctx.strokeStyle = '#fff'
+        ctx.strokeStyle = '#fff';
 	for(var i=0;i<this.text.data.length;i++){
 	 ctx.fillText(this.text.data[i].name, 128, 128+i*15);
 	}
