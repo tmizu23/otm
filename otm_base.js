@@ -49,8 +49,6 @@ var map = new OpenLayers.Map('map', {
     projection: new OpenLayers.Projection("EPSG:900913"), //明示しないとTMSが表示されない!
 });
 
-var bbb = new Image();
-bbb.onclick = "alert('a')";
 
 otm_layer = new OpenLayers.Layer.XYZ("otm","http://www.ecoris.co.jp/map/otm/data/${z}/${x}/${y}.txt", {
     isBaseLayer: false,
