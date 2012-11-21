@@ -151,7 +151,7 @@ otm.Tile.OpenTileMap = OpenLayers.Class(OpenLayers.Tile, {
         }
     },
 	getURL: function (bounds) {
-//	/*タイルを表示
+	/*タイルを表示
         var xyz = this.layer.getXYZ(bounds);
         var url = this.url;
 	if(parseInt(this.TMS)){
@@ -162,8 +162,8 @@ otm.Tile.OpenTileMap = OpenLayers.Class(OpenLayers.Tile, {
             url = this.selectUrl(s, url);
         }
         return OpenLayers.String.format(url, xyz);
-//	*/
-	/*タイル情報を表示
+	*/
+//	/*タイル情報を表示
 	var xyz = this.layer.getXYZ(bounds);
 	var ctx = this.getCanvasContext();
 	ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
@@ -176,7 +176,7 @@ otm.Tile.OpenTileMap = OpenLayers.Class(OpenLayers.Tile, {
 	 ctx.fillText(this.text.data[i].name, 128, 128+i*15);
 	}
 	return ctx.canvas.toDataURL();
-	*/ 
+//	*/ 
     },
     /**
      * Method: positionTile
