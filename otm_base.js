@@ -1,14 +1,3 @@
-OpenLayers.ProxyHost = "proxy.cgi?url="; // キャッシュのときに必要
-var otmdata;
-httpObj = new XMLHttpRequest();
-httpObj.open('GET',"otm.json",true);
-httpObj.send(null);
-httpObj.onreadystatechange = function(){
-      if( ( httpObj.readyState == 4) && (httpObj.status == 200)){
-         otmdata= JSON.parse(httpObj.responseText);
-      }
-}
-
 var dataSet1 = {
         0: null,1: null,2: null,3: null,4: null,
         5: {dataId: "BLANK"},
